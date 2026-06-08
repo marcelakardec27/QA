@@ -1,16 +1,14 @@
 {
   "name": "trabalho_vf",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "type": "module",
+  "scripts": {
+    "test": "mocha --reporter mochawesome --reporter-options reportDir=mochawesome-report"
+  },
   "dependencies": {
     "mocha": "^11.7.6"
+  },
+  "devDependencies": {
+    "mochawesome": "^7.1.3"
   }
 }

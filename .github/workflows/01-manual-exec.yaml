@@ -41,7 +41,7 @@ jobs:
       # Salvar relatórios (Opcional - só funcionará se o Mocha gerar a pasta ./report)
       - name: Salvando relatórios de testes
         uses: actions/upload-artifact@v4
-        if: ${{ always() }}
+        if: ${{ always() }} # Executa mesmo que algum teste falhe
         with:
-          path: ./report
-          name: Relatório de Testes Mocha
+          path: ./mochawesome-report
+          name: Relatório de Testes Mochawesome
