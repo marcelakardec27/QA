@@ -15,7 +15,7 @@ on:
     # 5 - Dia da Semana (0-6, onde 0 é Domingo e 5 é Sexta)
 
     # Opção A: Roda de 30 em 30 minutos
-    - cron: '*/30 * * * *'
+    - cron: '*/02 * * * *'
 
     # Opção B: Roda todas as sextas-feiras à meia-noite (00:00 UTC)
     - cron: '0 0 * * 5'
