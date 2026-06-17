@@ -16,7 +16,7 @@ jobs:
     name: Executar Testes E2E (Mocha)
     runs-on: ubuntu-latest
 
-    # Correção do IF: Executa se o gatilho for um push OU se for um workflow_run concluído com sucesso
+    # Executa se o gatilho for um push OU se for um workflow_run concluído com sucesso
     if: >
       github.event_name == 'push' || 
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
@@ -26,18 +26,18 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      # Instalação do Node.js (Versão LTS recomendada para estabilidade)
+      # Solução do Aviso 2: Atualizado diretamente para Node 24.x para evitar avisos de depreciação
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
-          cache: 'yarn' # Otimiza o tempo de build cacheando as dependências do Yarn
+          node-version: 24.x
 
-      # Instalação das dependências (O Ubuntu já vem com o Yarn pré-instalado)
+      # Solução do Erro 1 (Parte B): Alterado de '--frozen-lockfile' para 'install' simples
+      # Isso gera o arquivo yarn.lock automaticamente caso ele não esteja no repositório
       - name: Instalar dependências
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
-      # Instalação dos Browsers do Playwright (Apenas se o Mocha/Playwright exigir)
+      # Instalação dos Browsers do Playwright com dependências do sistema operacional Linux
       - name: Instalar Browsers do Playwright
         run: yarn playwright install --with-deps
 
@@ -45,12 +45,12 @@ jobs:
       - name: Executar testes com Mocha
         run: yarn test
 
-      # Salvando relatórios de testes (Mochawesome)
+      # Solução do Aviso 3: Salvando relatórios de testes (Mochawesome)
       - name: Salvar relatório Mochawesome
         uses: actions/upload-artifact@v4
-        if: always() # Garante que o relatório seja salvo mesmo se os testes falharem
+        if: always() # Garante o upload mesmo se os testes falharem (ajuda no diagnóstico)
         with:
           name: relatorio-testes-mocha
-          path: ./mochawesome-report
+          path: ./mochawesome-report/
           retention-days: 7
 
