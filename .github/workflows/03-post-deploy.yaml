@@ -1,0 +1,56 @@
+# CI de Nível 03 - Disparo após a conclusão de outra pipeline ou por Deploy/Push
+name: 'N3 - Execução por Deploy'
+
+# Regras de disparo
+on:
+  workflow_run:
+    workflows: ['N1 - Execução Manual', 'N2 - Execução Agendada']
+    types:
+      - completed
+  push:
+    branches:
+      - master
+
+jobs:
+  e2e-tests:
+    name: Executar Testes E2E (Mocha)
+    runs-on: ubuntu-latest
+
+    # Correção do IF: Executa se o gatilho for um push OU se for um workflow_run concluído com sucesso
+    if: >
+      github.event_name == 'push' || 
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+
+    steps:
+      # Clone do projeto
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Instalação do Node.js (Versão LTS recomendada para estabilidade)
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'yarn' # Otimiza o tempo de build cacheando as dependências do Yarn
+
+      # Instalação das dependências (O Ubuntu já vem com o Yarn pré-instalado)
+      - name: Instalar dependências
+        run: yarn install --frozen-lockfile
+
+      # Instalação dos Browsers do Playwright (Apenas se o Mocha/Playwright exigir)
+      - name: Instalar Browsers do Playwright
+        run: yarn playwright install --with-deps
+
+      # Executar os testes e2e com Mocha
+      - name: Executar testes com Mocha
+        run: yarn test
+
+      # Salvando relatórios de testes (Mochawesome)
+      - name: Salvar relatório Mochawesome
+        uses: actions/upload-artifact@v4
+        if: always() # Garante que o relatório seja salvo mesmo se os testes falharem
+        with:
+          name: relatorio-testes-mocha
+          path: ./mochawesome-report
+          retention-days: 7
+
