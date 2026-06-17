@@ -15,7 +15,7 @@ on:
     # 5 - Dia da Semana (0-6, onde 0 é Domingo e 5 é Sexta)
 
     # Opção A: Roda de 30 em 30 minutos
-    - cron: '*/60 * * * *'
+    - cron: '*/2 * * * *'
 
     # Opção B: Roda todas as sextas-feiras à meia-noite (00:00 UTC)
     - cron: '0 0 * * 5'
@@ -36,7 +36,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 24.x
 
       # instalação do Yarn globalmente
       - name: Instalando Yarn
