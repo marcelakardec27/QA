@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "mocha --reporter mochawesome --reporter-options reportDir=mochawesome-report"
+    "lint": "eslint .",
+    "test:unit": "mocha \"test/unit/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=mochawesome-report,overwrite=true,html=true,json=true",
+    "e2e": "mocha \"test/e2e/**/*.spec.js\" --reporter mochawesome --reporter-options reportDir=mochawesome-report,overwrite=true,html=true,json=true"
   },
   "dependencies": {
     "mocha": "^11.7.6"
