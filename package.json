@@ -9,9 +9,11 @@
     "e2e": "mocha test/servicoPagamento.test.js --reporter mochawesome --reporter-options reportDir=mochawesome-report,overwrite=true,html=true,json=true"
   },
   "dependencies": {
-    "mocha": "^11.7.6"
+    "mocha": "^11.3.0"
   },
   "devDependencies": {
-    "mochawesome": "^7.1.3"
-  }
+  "eslint": "^9.x.x",
+  "mochawesome": "^7.1.3"
+}
+  
 }

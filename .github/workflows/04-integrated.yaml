@@ -90,3 +90,5 @@ jobs:
     steps:
       - name: Simulação de Deploy
         run: echo 'Esteira concluída. Verifique os relatórios salvos se houver falhas.'
+
+  
