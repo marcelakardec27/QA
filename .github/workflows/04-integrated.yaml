@@ -83,6 +83,20 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+      - name: HTML Preview
+        id: preview
+        uses: pcan/html-preview-action@v1.1.0
+        if: always()
+        with:
+          html_file: 'mochawesome-report/mochawesome.html'
+
+      # PASSO EXTRA: Fixa as diretrizes no sumário da execução para facilitar o acesso
+      - name: Inserir Link no Sumário do Job
+        if: always()
+        run: |
+          echo "### 📊 Relatório de Testes E2E Disponível!" >> $GITHUB_STEP_SUMMARY
+          echo "Para visualizar o relatório Mochawesome interativo sem baixar o zip, acesse os logs do passo **HTML Preview** acima ou verifique as configurações de páginas do seu repositório." >> $GITHUB_STEP_SUMMARY
+
   # Job 4: Deploy (Só executa se os jobs anteriores terminarem)
   deploy:
     runs-on: ubuntu-latest
@@ -90,5 +104,3 @@ jobs:
     steps:
       - name: Simulação de Deploy
         run: echo 'Esteira concluída. Verifique os relatórios salvos se houver falhas.'
-
-  

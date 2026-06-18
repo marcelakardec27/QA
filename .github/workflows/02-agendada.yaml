@@ -14,11 +14,9 @@ on:
     # 4 - Mês (1-12)
     # 5 - Dia da Semana (0-6, onde 0 é Domingo e 5 é Sexta)
 
-    # Opção A: Roda de 30 em 30 minutos
-    - cron: '*/2 * * * *'
-
-    # Opção B: Roda todas as sextas-feiras à meia-noite (00:00 UTC)
-    - cron: '0 0 * * 5'
+    # Roda todos os dias às 23:00h (Horário de Brasília) -> 02:00h UTC
+    - cron: '0 2 * * 0-6'
+    
 
 # tarefas dentro da pipeline = jobs
 jobs:
