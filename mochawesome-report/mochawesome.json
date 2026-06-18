@@ -1,0 +1,200 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 5,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-06-18T20:31:40.666Z",
+    "end": "2026-06-18T20:31:40.678Z",
+    "duration": 12,
+    "testsRegistered": 5,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "45426192-8d8a-47f7-9f71-52aea2f6f27d",
+      "title": "",
+      "fullFile": "C:\\Projetos\\Trabalho_VF\\test\\servicoPagamento.test.js",
+      "file": "\\test\\servicoPagamento.test.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "05d5db84-2d85-44ba-922e-8a733d49f915",
+          "title": "Testes de Cobertura Total - Classe ServicoDePagamento",
+          "fullFile": "C:\\Projetos\\Trabalho_VF\\test\\servicoPagamento.test.js",
+          "file": "\\test\\servicoPagamento.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Testes de Cobertura Total - Classe ServicoDePagamento\"",
+              "fullTitle": "Testes de Cobertura Total - Classe ServicoDePagamento \"before each\" hook in \"Testes de Cobertura Total - Classe ServicoDePagamento\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "servico = new ServicoDePagamento();",
+              "err": {},
+              "uuid": "20662fa3-91b0-4e47-a78a-a8ffd0f5e862",
+              "parentUUID": "05d5db84-2d85-44ba-922e-8a733d49f915",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Deve retornar null quando a lista de pagamentos estiver vazia",
+              "fullTitle": "Testes de Cobertura Total - Classe ServicoDePagamento Deve retornar null quando a lista de pagamentos estiver vazia",
+              "timedOut": false,
+              "duration": 0,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "assert.strictEqual(servico.consultarUltimoPagamento(), null);",
+              "err": {},
+              "uuid": "46af152b-fbb9-4b9a-b6e0-43250bbf0cba",
+              "parentUUID": "05d5db84-2d85-44ba-922e-8a733d49f915",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Deve categorizar como \"padrão\" quando o valor for menor que 100.00",
+              "fullTitle": "Testes de Cobertura Total - Classe ServicoDePagamento Deve categorizar como \"padrão\" quando o valor for menor que 100.00",
+              "timedOut": false,
+              "duration": 1,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "servico.pagar('1234-5678', 'Empresa Alfa', 99.99);\nconst ultimo = servico.consultarUltimoPagamento();\nassert.strictEqual(ultimo.codigoBarras, '1234-5678');\nassert.strictEqual(ultimo.empresa, 'Empresa Alfa');\nassert.strictEqual(ultimo.valor, 99.99);\nassert.strictEqual(ultimo.categoria, 'padrão');",
+              "err": {},
+              "uuid": "6d70acf0-0882-4525-9447-aa384fca04bb",
+              "parentUUID": "05d5db84-2d85-44ba-922e-8a733d49f915",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Deve categorizar como \"padrão\" quando o valor for exatamente 100.00",
+              "fullTitle": "Testes de Cobertura Total - Classe ServicoDePagamento Deve categorizar como \"padrão\" quando o valor for exatamente 100.00",
+              "timedOut": false,
+              "duration": 0,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "servico.pagar('4321-8765', 'Empresa Beta', 100.00);\nconst ultimo = servico.consultarUltimoPagamento();\nassert.strictEqual(ultimo.categoria, 'padrão');",
+              "err": {},
+              "uuid": "cee48c77-903f-444b-9f05-c85d506770dc",
+              "parentUUID": "05d5db84-2d85-44ba-922e-8a733d49f915",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Deve categorizar como \"cara\" quando o valor for maior que 100.00",
+              "fullTitle": "Testes de Cobertura Total - Classe ServicoDePagamento Deve categorizar como \"cara\" quando o valor for maior que 100.00",
+              "timedOut": false,
+              "duration": 0,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "servico.pagar('1111-2222', 'Empresa Gamma', 100.01);\nconst ultimo = servico.consultarUltimoPagamento();\nassert.strictEqual(ultimo.categoria, 'cara');",
+              "err": {},
+              "uuid": "27d7e33a-b925-4073-95e8-aaa7cf37c3be",
+              "parentUUID": "05d5db84-2d85-44ba-922e-8a733d49f915",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Deve retornar estritamente o último pagamento inserido, ignorando os anteriores",
+              "fullTitle": "Testes de Cobertura Total - Classe ServicoDePagamento Deve retornar estritamente o último pagamento inserido, ignorando os anteriores",
+              "timedOut": false,
+              "duration": 0,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "servico.pagar('1111-1111', 'Primeira Empresa', 50.00);\nservico.pagar('2222-2222', 'Segunda Empresa', 250.00);\nservico.pagar('3333-3333', 'Última Empresa', 120.00);\n\nconst ultimo = servico.consultarUltimoPagamento();\n// Garante que o retorno é o terceiro pagamento e não os anteriores\nassert.strictEqual(ultimo.codigoBarras, '3333-3333');\nassert.strictEqual(ultimo.empresa, 'Última Empresa');\nassert.strictEqual(ultimo.valor, 120.00);\nassert.strictEqual(ultimo.categoria, 'cara');",
+              "err": {},
+              "uuid": "e8842a88-dc3b-4972-84f6-b5730bff81ad",
+              "parentUUID": "05d5db84-2d85-44ba-922e-8a733d49f915",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "46af152b-fbb9-4b9a-b6e0-43250bbf0cba",
+            "6d70acf0-0882-4525-9447-aa384fca04bb",
+            "cee48c77-903f-444b-9f05-c85d506770dc",
+            "27d7e33a-b925-4073-95e8-aaa7cf37c3be",
+            "e8842a88-dc3b-4972-84f6-b5730bff81ad"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 1,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "11.7.6"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "mochawesome-report",
+        "overwrite": "true",
+        "html": "true",
+        "json": "true"
+      },
+      "version": "6.3.2"
+    }
+  }
+}

@@ -34,14 +34,14 @@ jobs:
       - name: Instalando dependências
         run: yarn install
 
-      # executar os testes Mocha usando o script do package.json
+      # executar os testes Mocha usando o comando direto que validamos
       - name: Executando testes com Mocha
-        run: yarn test
+        run: npx mocha test/servicoPagamento.test.js --reporter mochawesome --reporter-options reportDir=mochawesome-report,overwrite=true,html=true,json=true
 
-      # Salvar relatórios (Opcional - só funcionará se o Mocha gerar a pasta ./report)
+      # Salvar relatórios (Garante o upload da pasta correta mesmo se o teste falhar)
       - name: Salvando relatórios de testes
         uses: actions/upload-artifact@v4
         if: ${{ always() }} # Executa mesmo que algum teste falhe
         with:
-          path: ./mochawesome-report
           name: Relatório de Testes Mochawesome
+          path: ./mochawesome-report
