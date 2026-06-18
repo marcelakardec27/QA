@@ -22,10 +22,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Instalando dependências
-        run: yarn install
+        run: npm install
 
       - name: Inspeção de Código (Linter)
-        run: yarn lint
+        run: npm run lint
         continue-on-error: true 
 
   # Job 2: Testes Unitários com Mocha
@@ -40,11 +40,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Instalando dependências
-        run: yarn install
+        run: npm install
 
       - name: Rodando testes unitários com Mocha
-        run: yarn test:unit
-        continue-on-error: true # Permite gerar o relatório mesmo se um teste falhar
+        run: npx mocha test/servicoPagamento.test.js --reporter mochawesome --reporter-options reportDir=mochawesome-report,overwrite=true,html=true,json=true
 
       - name: Salvando relatório de testes unitários
         uses: actions/upload-artifact@v4
@@ -52,7 +51,7 @@ jobs:
         with:
           name: relatorio-unitario-mocha
           path: ./mochawesome-report/
-          if-no-files-found: ignore # Evita o erro caso a pasta não exista
+          if-no-files-found: ignore
           retention-days: 7
 
   # Job 3: Testes E2E com Mocha + Playwright
@@ -67,14 +66,13 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Instalando dependências
-        run: yarn install
+        run: npm install
 
       - name: Instalando Browsers do Playwright
-        run: yarn playwright install --with-deps
+        run: npx playwright install --with-deps
 
       - name: Executando testes E2E com Mocha
-        run: yarn e2e
-        continue-on-error: true # Permite gerar o relatório E2E com prints das falhas
+        run: npx mocha test/servicoPagamento.test.js --reporter mochawesome --reporter-options reportDir=mochawesome-report,overwrite=true,html=true,json=true
 
       - name: Salvando relatório Mochawesome E2E
         uses: actions/upload-artifact@v4
@@ -82,7 +80,7 @@ jobs:
         with:
           name: relatorio-e2e-mochawesome
           path: ./mochawesome-report/
-          if-no-files-found: ignore # Evita o erro caso a pasta não exista
+          if-no-files-found: ignore
           retention-days: 7
 
   # Job 4: Deploy (Só executa se os jobs anteriores terminarem)
