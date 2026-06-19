@@ -1,6 +1,7 @@
 # CI de Nível 04 - Pipeline Integrada ao Build do Código
 name: 'N4 - Execução Integrada'
 
+# Regras de disparo (Gatilho Manual e Push na Master)
 on:
   workflow_dispatch:
   push:
@@ -8,65 +9,90 @@ on:
       - master
 
 env:
-  NODE_VERSION: '24.x'
-
+  NODE_VERSION: '24.x' # Mantém fixo na versão de execução estável para evitar deprecation warnings
+#tarefas dentro da pipeline = jobs
 jobs:
- # Job 1: Inspeção de Qualidade
+  # Job 1: Inspeção de Qualidade (Linter)
   inspecao:
+  # maquina onde o job vai rodar
     runs-on: ubuntu-latest
+    # passos do job
     steps:
-      - uses: actions/checkout@v4
+       # Clone do projeto
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+       # instalção do node
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Instalando dependências
-        run: npm install
+       # instalação do Yarn
+        run: npm install -g yarn
 
-      - name: Inspeção de Código (Linter)
-        run: npm run lint
-        continue-on-error: true # Se houver qualquer aviso pendente, a esteira não cai!
+        # instalação das dependências
+      - name: Instalando dependências com Yarn
+        run: yarn install
 
-  # Job 2: Testes Unitários com Mocha
+      - name: Inspeção de Código 
+        run: yarn run lint
+        continue-on-error: true # Se houver avisos cosméticos de formatação, a esteira avança para os testes
+
+  # Job 2: Testes Unitários (Onde estão os seus 5 testes de sucesso)
   unidade:
     runs-on: ubuntu-latest
     needs: [inspecao]
-    if: always() # Garante que os testes vão rodar mesmo que o linter encontre avisos de estilo
+    
+    steps:
+      uses: actions/checkout@v4
+
+      uses: actions/setup-node@v4
+        with:
+          node-version: latest
+
+       - name: Instalando Yarn
+        run: npm install -g yarn
+
+      - name: Instalando dependências
+        run: yarn
+
+      - name: Rodando testes unitários
+        run: yarn run test
+
+       e2e-tests:
+    runs-on: ubuntu-latest
+    needs: [inspecao]
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: latest
+
+      - name: Instalando Yarn
+        run: npm install -g yarn
 
       - name: Instalando dependências
-        run: npm install
+        run: yarn
 
-      # OTIMIZAÇÃO: Usando o script nativo que você mapeou no seu package.json
-      - name: Rodando testes com Mocha
-        run: npm run test:unit
+      - name: Instalando Browsers do Playwright
+        run: yarn playwright install
 
-      - name: Salvando relatório de testes unitários
+      - name: Executando testes E2E
+        run: yarn run e2e
+
+      - name: Salvando relatórios de testes
         uses: actions/upload-artifact@v4
-        if: always()
+        if: ${{ always() }}
         with:
-          name: relatorio-unitario-mocha
-          path: ./mochawesome-report/
-          if-no-files-found: ignore
-          retention-days: 7
-
-      - name: Inserir Sumário de Execução do Job
-        if: always()
-        run: |
-          echo "### 📊 Relatório de Testes Disponível!" >> $GITHUB_STEP_SUMMARY
-          echo "Os 5 testes automatizados do ficheiro servicoPagamento.test.js foram executados." >> $GITHUB_STEP_SUMMARY
-
-  # Job 3: Deploy
+          path: ./playwright-report
+          name: Relatório de Testes E2E
+          
+  # Job 3: Deploy Simplificado (Sem jobs fantasma e conectado ao fluxo correto)
   deploy:
     runs-on: ubuntu-latest
-    needs: [unidade]
-    if: always()
+    needs: [unidade, e2e-tests]
+
     steps:
       - name: Simulação de Deploy
-        run: echo 'Esteira concluída com sucesso e código 100% validado!'
+        run: echo 'Deploy sendo realizado...'
