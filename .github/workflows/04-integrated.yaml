@@ -11,7 +11,7 @@ env:
   NODE_VERSION: '24.x'
 
 jobs:
-  # Job 1: Inspeção de Qualidade
+ # Job 1: Inspeção de Qualidade
   inspecao:
     runs-on: ubuntu-latest
     steps:
@@ -24,10 +24,9 @@ jobs:
       - name: Instalando dependências
         run: npm install
 
-      # CORREÇÃO: O operador '|| true' no terminal força o bash do Ubuntu a retornar status 0 (sucesso),
-      # garantindo que o Job fique verde e não bloqueie os jobs dependentes em nenhuma circunstância.
       - name: Inspeção de Código (Linter)
-        run: npm run lint || true
+        run: npm run lint
+        continue-on-error: true # Se houver qualquer aviso pendente, a esteira não cai!
 
   # Job 2: Testes Unitários com Mocha
   unidade:
