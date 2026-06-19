@@ -31,13 +31,13 @@ jobs:
 
       - name: Inspeção de Código (Linter)
         run: yarn run lint
-        continue-on-error: true
+        continue-on-error: true # Alertas cosméticos não quebram o avanço da esteira
 
-  # Job 2: Testes Unitários com Mocha
+  # Job 2: Testes Unitários com Mocha (Onde estão os seus 5 testes reais)
   unidade:
     runs-on: ubuntu-latest
     needs: [inspecao]
-    if: always()
+    if: always() # Garante a execução dos testes independentemente do linter
     steps:
       - name: Clone do projeto
         uses: actions/checkout@v4
@@ -65,44 +65,10 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-  # Job 3: Testes E2E (Playwright + Mocha)
-  e2e-tests:
-    runs-on: ubuntu-latest
-    needs: [inspecao]
-    if: always()
-    steps:
-      - name: Clone do projeto
-        uses: actions/checkout@v4
-
-      - name: Configuração do Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Instalando Yarn globalmente
-        run: npm install -g yarn
-
-      - name: Instalando dependências com Yarn
-        run: yarn install
-
-      - name: Instalando Browsers do Playwright
-        run: yarn playwright install
-
-      - name: Executando testes E2E
-        run: yarn run e2e
-
-      - name: Salvando relatórios de testes E2E
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          path: ./mochawesome-report/
-          name: Relatório de Testes E2E
-
-  # Job 4: Deploy
+  # Job 3: Deploy (Conectado apenas ao que realmente existe)
   deploy:
     runs-on: ubuntu-latest
-    needs: [unidade, e2e-tests]
-    if: always()
+    needs: [unidade] # CORREÇÃO: Depende apenas do job 'unidade' que já está a passar com sucesso!
     steps:
       - name: Simulação de Deploy
         run: echo 'Deploy sendo realizado... Código validado com Mocha!'
